@@ -18,7 +18,7 @@ namespace PinchRadialMenu
 						Full
 				}
 				public GameObject curosrSprite;
-				public GameObject immediateSprite;
+				public GameObject immediateSprite; // shown when fully pinched. 
 				Vector3 cursorPosition = Vector3.zero; // the visible cursor's position
 				Vector3 immediatePosition = Vector3.zero; // the actual fingerpinch position
 				public GameObject thumbSprite;
@@ -49,6 +49,7 @@ namespace PinchRadialMenu
 						set {  
 								state_ = value;
 								ShowCursors ();
+								Debug.Log ("Setting state to " + state);
 						}
 				}
 // smoothing
@@ -76,7 +77,7 @@ namespace PinchRadialMenu
 								SetPinchAnimation ();
 								switch (GetPinch ()) {
 								case 1:
-										state = PinchState.Open;
+										state = PinchState.Full;
 										break;
 
 								case 2: 
@@ -84,7 +85,7 @@ namespace PinchRadialMenu
 										break;
 
 								case 3:
-										state = PinchState.Full;
+										state = PinchState.Open;
 										break;
 								}
 						} else {
@@ -97,12 +98,12 @@ namespace PinchRadialMenu
 				void AnimateCursor (FingerModel index, FingerModel thumb)
 				{
 						Vector3 midPosition = (index.GetTipPosition () + thumb.GetTipPosition ()) / 2;
-						immediatePosition = (smoothCursor) ? Utils.ExponentialVectorSmoothing (midPosition, cursorPosition, cursorExp) : midPosition;
+						immediatePosition = (smoothCursor) ? Utils.ExponentialVectorSmoothing (immediatePosition, midPosition, cursorExp) : midPosition;
 						if (state == PinchState.Open) {
 								cursorPosition = immediatePosition;
 						}
 						curosrSprite.transform.position = TransformPosition (cursorPosition);
-						immediateSprite.transform.position = immediatePosition;
+						immediateSprite.transform.position = TransformPosition(immediatePosition);
 				}
 
 				void ShowCursors ()
@@ -155,12 +156,12 @@ namespace PinchRadialMenu
 						if (handController.hand_graphics_.Count != 1)
 								return 3;
 			
-			// using foreach artifically to get the first hands' pinch strength
+						// using foreach artifically to get the first hands' pinch strength
 						foreach (HandModel hh in handController.hand_graphics_.Values) {
 								Hand h = hh.GetLeapHand ();
-								if (h.PinchStrength > PINCH_PART)
+								if (h.PinchStrength > PINCH_FULL)
 										return 1;
-								else if (h.PinchStrength > PINCH_FULL)
+								else if (h.PinchStrength > PINCH_PART)
 										return 2;
 								else 
 										return 3;
