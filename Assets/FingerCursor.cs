@@ -10,31 +10,56 @@ namespace PinchRadialMenu
 {
 		public class FingerCursor : MonoBehaviour
 		{
-				public GameObject sprite;
+				enum PinchState
+				{
+						NoHands,
+						Open,
+						Part,
+						Full
+				}
+				public GameObject curosrSprite;
+				public GameObject immediateSprite;
+				Vector3 cursorPosition = Vector3.zero; // the visible cursor's position
+				Vector3 immediatePosition = Vector3.zero; // the actual fingerpinch position
 				public GameObject thumbSprite;
 				public GameObject fingerSprite;
 				public Camera camera;
-				public Camera menuCamera;
 				public HandController handController;
+
+// positional transform variables
 				public Vector3 cursorOffset = new Vector3 (0, 0, 0);
 				public float prePowScale = 0.5f;
 				public float ScaleX = 2.0f;
+// because of gravity it is harder to lift your finger than to drop it 
+// so a higher positiveY scale allows for an easier lift.
 				public float ScalePositiveY = 3.0f;
 				public float ScaleNegativeY = 2.5f;
 				public float cursorPow = 1.5f;
+// pinch state
 				bool pinching = false;
-				Vector3 cursorPosition = Vector3.zero;
-				const float MIN_PINCH = 0.5f;
-				const float MID_PINCH = 0.25f;
-				public bool freezeOnPinch = true;
+				const float PINCH_PART = 0.25f;
+				const float PINCH_FULL = 0.50f;
+				PinchState state_ = PinchState.NoHands;
+
+				PinchState state {
+						get { 
+								return state_;
+						}
+			
+						set {  
+								state_ = value;
+								ShowCursors ();
+						}
+				}
+// smoothing
 				public bool smoothCursor = true;
 				public float cursorExp = 0.2f;
 
 				// Use this for initialization
 				void Start ()
 				{
-						if (sprite == null)
-								sprite = transform.Find ("cursor").gameObject;
+						if (curosrSprite == null)
+								curosrSprite = transform.Find ("cursor").gameObject;
 
 						if (camera == null)
 								camera = Camera.main;
@@ -45,26 +70,75 @@ namespace PinchRadialMenu
 				{
 						FingerModel index = GetIndex ();
 						FingerModel thumb = GetThumb ();
-
-						sprite.SetActive (index != null);
-						fingerSprite.SetActive (index != null);
-						thumbSprite.SetActive (index != null);
 			
-
 						if (index != null && thumb != null) {
-				
-								if ((!freezeOnPinch) || (GetPinch () == 3)) {
-										Vector3 midPosition = (index.GetTipPosition () + thumb.GetTipPosition ()) / 2;
-					cursorPosition = (smoothCursor) ? Utils.ExponentialVectorSmoothing (midPosition, cursorPosition, cursorExp) : midPosition;
-								}
-								sprite.transform.position = TransformPosition (cursorPosition);
-								sprite.GetComponent<CursorSprite> ().ani.SetInteger ("pinch", GetPinch ());
+								AnimateCursor (index, thumb);
+								SetPinchAnimation ();
+								switch (GetPinch ()) {
+								case 1:
+										state = PinchState.Open;
+										break;
 
-								fingerSprite.transform.position = TransformPosition (index.GetTipPosition ());
-								thumbSprite.transform.position = TransformPosition (thumb.GetTipPosition ());
+								case 2: 
+										state = PinchState.Part;
+										break;
+
+								case 3:
+										state = PinchState.Full;
+										break;
+								}
 						} else {
-								Debug.Log ("No Index Finger");
+								state = PinchState.NoHands;
 						}
+
+						SetFingerSpritePosition (index, thumb);
+				}
+
+				void AnimateCursor (FingerModel index, FingerModel thumb)
+				{
+						Vector3 midPosition = (index.GetTipPosition () + thumb.GetTipPosition ()) / 2;
+						immediatePosition = (smoothCursor) ? Utils.ExponentialVectorSmoothing (midPosition, cursorPosition, cursorExp) : midPosition;
+						if (state == PinchState.Open) {
+								cursorPosition = immediatePosition;
+						}
+						curosrSprite.transform.position = TransformPosition (cursorPosition);
+						immediateSprite.transform.position = immediatePosition;
+				}
+
+				void ShowCursors ()
+				{
+						switch (state) {
+						case PinchState.NoHands:
+								curosrSprite.SetActive (false);
+								fingerSprite.SetActive (false);
+								thumbSprite.SetActive (false);
+								immediateSprite.SetActive (false);
+								break;
+				
+						case PinchState.Full: 
+								immediateSprite.SetActive (true);
+								break;
+
+						default:
+								curosrSprite.SetActive (true);
+								fingerSprite.SetActive (true);
+								thumbSprite.SetActive (true);
+								immediateSprite.SetActive (false);
+								break;
+						}
+				}
+
+				void SetFingerSpritePosition (FingerModel index, FingerModel thumb)
+				{
+						if (index != null)
+								fingerSprite.transform.position = TransformPosition (index.GetTipPosition ());
+						if (thumb != null)
+								thumbSprite.transform.position = TransformPosition (thumb.GetTipPosition ());
+				}
+
+				void SetPinchAnimation ()
+				{
+						curosrSprite.GetComponent<CursorSprite> ().ani.SetInteger ("pinch", GetPinch ());
 				}
 
 				Vector3 TransformPosition (Vector3 original)
@@ -81,13 +155,15 @@ namespace PinchRadialMenu
 						if (handController.hand_graphics_.Count != 1)
 								return 3;
 			
+			// using foreach artifically to get the first hands' pinch strength
 						foreach (HandModel hh in handController.hand_graphics_.Values) {
 								Hand h = hh.GetLeapHand ();
-								if (h.PinchStrength > MIN_PINCH)
+								if (h.PinchStrength > PINCH_PART)
 										return 1;
-								if (h.PinchStrength > MID_PINCH)
+								else if (h.PinchStrength > PINCH_FULL)
 										return 2;
-								return 3;
+								else 
+										return 3;
 						}
 			
 						return 3;
