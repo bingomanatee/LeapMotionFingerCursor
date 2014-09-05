@@ -10,7 +10,7 @@ namespace PinchRadialMenu
 {
 		public class FingerCursor : MonoBehaviour
 		{
-				enum PinchState
+				public enum PinchState
 				{
 						NoHands,
 						Open,
@@ -41,7 +41,7 @@ namespace PinchRadialMenu
 				const float PINCH_FULL = 0.50f;
 				PinchState state_ = PinchState.NoHands;
 
-				PinchState state {
+				public PinchState state {
 						get { 
 								return state_;
 						}
