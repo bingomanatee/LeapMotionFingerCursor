@@ -47,9 +47,10 @@ namespace PinchRadialMenu
 						}
 			
 						set {  
-								state_ = value;
-								ShowCursors ();
-								Debug.Log ("Setting state to " + state);
+								if (state_ != value) {
+										state_ = value;
+										ShowCursors ();
+								}
 						}
 				}
 // smoothing
@@ -103,7 +104,7 @@ namespace PinchRadialMenu
 								cursorPosition = immediatePosition;
 						}
 						curosrSprite.transform.position = TransformPosition (cursorPosition);
-						immediateSprite.transform.position = TransformPosition(immediatePosition);
+						immediateSprite.transform.position = TransformPosition (immediatePosition);
 				}
 
 				void ShowCursors ()
@@ -139,7 +140,9 @@ namespace PinchRadialMenu
 
 				void SetPinchAnimation ()
 				{
-						curosrSprite.GetComponent<CursorSprite> ().ani.SetInteger ("pinch", GetPinch ());
+						CursorSprite c = curosrSprite.GetComponent<CursorSprite> ();
+						if (c != null)
+								c.ani.SetInteger ("pinch", GetPinch ());
 				}
 
 				Vector3 TransformPosition (Vector3 original)
@@ -198,7 +201,7 @@ namespace PinchRadialMenu
 		
 				HandModel GetHandModel ()
 				{
-						if (handController.hand_graphics_.Count != 1)
+						if (handController == null || handController.hand_graphics_ == null || handController.hand_graphics_.Count != 1)
 								return null;
 			
 						foreach (HandModel hh in handController.hand_graphics_.Values) {

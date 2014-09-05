@@ -16,9 +16,8 @@ namespace PinchRadialMenu
 				enum MenuState
 				{
 						Closed,
-						Opening,
-						Open,
-						Closing
+						Over,
+						Open
 				}
 
 				public FingerCursor cursor;
@@ -36,81 +35,52 @@ namespace PinchRadialMenu
 						}
 
 						set {
-								if (value == state_)
+								if (value == state_ || value == null)
 										return;
 								switch (value) {
 								case MenuState.Closed:
-// no action
+										AnimateMenuClose ();
+										ShowMenuItems (false);
 										break;
 
-								case MenuState.Opening:
-										AnimateMenuOpen (state_);
+								case MenuState.Over:
+										AnimateMenuOpen ();
 										break;
 
 								case MenuState.Open: 
-// no action
+										ShowMenuItems (true);
 										break;
 
-								case MenuState.Closing: 
-										AnimateMenuClose (state_);
+								default: 
+										Debug.Log ("Not handling state " + value);
 										break;
 								}
-								state = value; 
+								state_ = value; 
 
 						}
 				}
 
-				void AnimateMenuOpen (MenuState oldState)
+				void AnimateMenuOpen ()
 				{
-						switch (oldState) {
-						case MenuState.Closed:
-// do transition;
-								break;
+						background.SetInteger ("MenuState", 1);
+				}
 
-						case MenuState.Closing:
-// do transition
-								break;
-
-						default: 
-// opened or opening -- do nothing
-								break;
-
+				void ShowMenuItems (bool show)
+				{
+						Debug.Log ("Setting visible of " + items.Count + " items to " + show);
+						foreach (ProximityMenuItem i in items) {
+								i.renderer.enabled = show;
 						}
 				}
 
-				void AnimateMenuClose (MenuState oldState)
+				void AnimateMenuClose ()
 				{
-						switch (oldState) {
-						case MenuState.Open:
-				// do transition
-								break;
-				
-						case MenuState.Opening:
-				// do transition
-								break;
-				
-						default: 
-				// closed or closing -- do nothing
-								break;
-				
-						}
-				}
-
-				void ShowMenu (bool show)
-				{
-						if (show) {
-								if (state == MenuState.Closed || state == MenuState.Closing) {
-										state = MenuState.Opening;
-								}
-						} else {
-								if (state == MenuState.Open || state == MenuState.Opening) {
-										state = MenuState.Closing;
-								}
-						}
+						background.SetInteger ("MenuState", 2);
 				}
 
 				void HighlightClosest ()
 				{ 
+						return;
 						float nearestDistance = 10000;
 						ProximityMenuItem nearestMenu;
 						Vector3 cursorPosition = cursor.curosrSprite.transform.position;
@@ -126,10 +96,40 @@ namespace PinchRadialMenu
 						}
 				}
 
-				void ShowMenu ()
+				void RefreshMenu ()
 				{
-						ShowMenu (true);
-						background.SetTrigger ("Start");
+						if (cursor != null && cursor.state != null) {
+				
+								switch (cursor.state) {
+								case FingerCursor.PinchState.NoHands:
+										if (cursor.state != oldState) {
+										}
+										break;
+				
+								case FingerCursor.PinchState.Open:
+										if (cursor.state != oldState) {
+											
+						ShowMenuItems (false);
+										}
+										break;
+				
+								case FingerCursor.PinchState.Part:
+										if (cursor.state != oldState) {
+												
+						ShowMenuItems (true);
+										}
+										break;
+				
+								case FingerCursor.PinchState.Full:
+										if (cursor.state != oldState) {
+											
+						ShowMenuItems (true);
+										} 
+				//if (state == MenuState.Open)
+				//	HighlightClosest ();
+										break;
+								}
+						}
 				}
 		
 		#region main loops
@@ -140,7 +140,7 @@ namespace PinchRadialMenu
 						items = new List<ProximityMenuItem> ();
 						foreach (ProximityMenuItem mi in GetComponentsInChildren<ProximityMenuItem>())
 								items.Add (mi);
-			
+						ShowMenuItems (false);
 						background.SetInteger ("MenuState", 0);
 				}
 		
@@ -151,7 +151,7 @@ namespace PinchRadialMenu
 				void Update ()
 				{
 
-						if (Time.time > 8 && (!ad)) {
+						/*		if (Time.time > 8 && (!ad)) {
 								Debug.Log ("Closing Menu");
 								background.SetInteger ("MenuState", 2);
 								ad = true;
@@ -159,33 +159,37 @@ namespace PinchRadialMenu
 								Debug.Log ("Opening Menu");
 								background.SetInteger ("MenuState", 1);
 								ad1 = true;
-						}
-
-						switch (cursor.state) {
-						case FingerCursor.PinchState.NoHands:
-								if (cursor.state != oldState)
-										ShowMenu (false);
-								break;
-				
-						case FingerCursor.PinchState.Open:
-								if (cursor.state != oldState)
-										ShowMenu (false);
-								break;
-
-						case FingerCursor.PinchState.Part:
-								if (cursor.state != oldState)
-										ShowMenu (true);
-								break;
-
-						case FingerCursor.PinchState.Full:
-				
-								if (cursor.state != oldState)
-										ShowMenu (true);
-								if (state == MenuState.Open)
-										HighlightClosest ();
-								break;
-						}
+						} */
+						RefreshMenu ();
 				}
 		#endregion
+
+		#region triggers
+
+				void OnTriggerEnter2D (Collider2D c)
+				{ 
+						if (c.tag == "mainCursor")
+								Debug.Log ("Trigger enter");
+						if (state == MenuState.Closed)
+								state = MenuState.Over;
+				}
+
+				void OnTriggerStay2d (Collider2D c)
+				{
+
+				}
+
+				void OnTriggerExit2D (Collider2D c)
+				{
+			
+						if (c.tag == "mainCursor")
+								Debug.Log ("Trigger exit");
+						if (state == MenuState.Over)
+								state = MenuState.Closed;
+
+				}
+
+#endregion
+
 		}
 }

@@ -1,0 +1,91 @@
+fileFormatVersion: 2
+guid: 4eae346e51909405191d2052d964c21b
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Menu2-Exit
+    21300002: Menu2-Open
+    21300004: Menu2-Save
+    21300006: Menu2-background
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Menu2-Exit
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 1861
+        width: 1073
+        height: 845
+      alignment: 9
+      pivot: {x: .389536202, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Menu2-Open
+      rect:
+        serializedVersion: 2
+        x: 1646
+        y: 719
+        width: 844
+        height: 1083
+      alignment: 9
+      pivot: {x: .520062327, y: .390556127}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Menu2-Save
+      rect:
+        serializedVersion: 2
+        x: 2573
+        y: 1861
+        width: 1058
+        height: 845
+      alignment: 9
+      pivot: {x: .590690851, y: .493320674}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Menu2-background
+      rect:
+        serializedVersion: 2
+        x: 1648
+        y: 1865
+        width: 838
+        height: 841
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

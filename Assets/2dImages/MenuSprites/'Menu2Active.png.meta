@@ -1,0 +1,91 @@
+fileFormatVersion: 2
+guid: af2d1ab12df984c13a2b4752bde4b24b
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: '''Menu2Active_Edit'
+    21300002: '''Menu2Active_Open'
+    21300004: '''Menu2Active_Save'
+    21300006: '''Menu2Active_Background'
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: '''Menu2Active_Edit'
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 1861
+        width: 1084
+        height: 845
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: '''Menu2Active_Open'
+      rect:
+        serializedVersion: 2
+        x: 1644
+        y: 719
+        width: 846
+        height: 1083
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: '''Menu2Active_Save'
+      rect:
+        serializedVersion: 2
+        x: 2573
+        y: 1861
+        width: 1059
+        height: 856
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: '''Menu2Active_Background'
+      rect:
+        serializedVersion: 2
+        x: 1648
+        y: 1865
+        width: 824
+        height: 841
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
