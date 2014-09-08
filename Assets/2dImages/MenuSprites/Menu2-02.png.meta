@@ -6,6 +6,7 @@ TextureImporter:
     21300002: Menu2-Open
     21300004: Menu2-Save
     21300006: Menu2-background
+    21300008: Menu2-placeholder
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -84,6 +85,16 @@ TextureImporter:
         y: 1865
         width: 838
         height: 841
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Menu2-placeholder
+      rect:
+        serializedVersion: 2
+        x: 1677
+        y: 2823
+        width: 846
+        height: 846
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

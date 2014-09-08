@@ -37,6 +37,12 @@ namespace PinchRadialMenu
 						set {
 								if (value == state_ || value == null)
 										return;
+
+								Debug.Log ("Menu State: " + state_ + " to " + value);
+
+								if (state_ == MenuState.Open || state_ == MenuState.Over)
+										ReflectChosenMenu ();
+
 								switch (value) {
 								case MenuState.Closed:
 										AnimateMenuClose ();
@@ -60,6 +66,12 @@ namespace PinchRadialMenu
 						}
 				}
 
+				void ReflectChosenMenu ()
+				{
+						Debug.Log ("=========Choice Made: " + ((lastHotMenu == null) ? "(none)" : lastHotMenu.value));
+						lastHotMenu = null;
+				}
+
 				void AnimateMenuOpen ()
 				{
 						background.SetInteger ("MenuState", 1);
@@ -67,9 +79,10 @@ namespace PinchRadialMenu
 
 				void ShowMenuItems (bool show)
 				{
-						Debug.Log ("Setting visible of " + items.Count + " items to " + show);
+						//Debug.Log ("Setting visible of " + items.Count + " items to " + show);
 						foreach (ProximityMenuItem i in items) {
 								i.renderer.enabled = show;
+i.Select(false);
 						}
 				}
 
@@ -78,58 +91,64 @@ namespace PinchRadialMenu
 						background.SetInteger ("MenuState", 2);
 				}
 
-				void HighlightClosest ()
-				{ 
-						return;
-						float nearestDistance = 10000;
-						ProximityMenuItem nearestMenu;
-						Vector3 cursorPosition = cursor.curosrSprite.transform.position;
-						foreach (ProximityMenuItem mi in items) {
-								float distance = (mi.transform.position - cursorPosition).magnitude;
-								if (distance < nearestDistance) {
-										nearestDistance = distance;
-										nearestMenu = mi;
-								}
-						}
-						if (activeItem != null) {
-								activeItem.SetActive (false);
-						}
-				}
-
 				void RefreshMenu ()
 				{
 						if (cursor != null && cursor.state != null) {
 				
-								switch (cursor.state) {
-								case FingerCursor.PinchState.NoHands:
-										if (cursor.state != oldState) {
-										}
-										break;
+								if (cursor.state != oldState) {
+										switch (cursor.state) {
+										case FingerCursor.PinchState.NoHands:
+												break;
 				
-								case FingerCursor.PinchState.Open:
-										if (cursor.state != oldState) {
-											
-						ShowMenuItems (false);
-										}
-										break;
+										case FingerCursor.PinchState.Open:
+												if (state == MenuState.Open) {
+														ShowMenuItems (false);
+														state = MenuState.Closed;
+												}
+												break;
 				
-								case FingerCursor.PinchState.Part:
-										if (cursor.state != oldState) {
-												
-						ShowMenuItems (true);
-										}
-										break;
+										case FingerCursor.PinchState.Part:
+												if (state == MenuState.Open) {
+														ShowMenuItems (false);
+														state = MenuState.Closed;
+												}
+												break;
 				
-								case FingerCursor.PinchState.Full:
-										if (cursor.state != oldState) {
-											
-						ShowMenuItems (true);
-										} 
-				//if (state == MenuState.Open)
-				//	HighlightClosest ();
-										break;
+										case FingerCursor.PinchState.Full:
+												ShowMenuItems (true);
+												state = MenuState.Open;
+												break;
+										}
+
+										oldState = cursor.state;
+								}
+
+						}
+						if (state == MenuState.Open) {
+								FindHotMenuItem ();
+						}
+				}
+		
+				ProximityMenuItem lastHotMenu;
+
+				void FindHotMenuItem ()
+				{
+						ProximityMenuItem hotMenu = null;
+						Vector3 cimp = cursor.immediateSprite.transform.position;
+						foreach (ProximityMenuItem mi in items) {
+								if (hotMenu == null || (mi.transform.position - cimp).sqrMagnitude < (hotMenu.transform.position - cimp).sqrMagnitude) {
+										hotMenu = mi;
 								}
 						}
+
+						if (hotMenu != lastHotMenu) {
+								if (lastHotMenu != null) 
+										lastHotMenu.Select (false);
+								lastHotMenu = hotMenu;
+								lastHotMenu.Select ();
+						}
+						Debug.Log ("finding hot menu: " + lastHotMenu.value);
+			
 				}
 		
 		#region main loops
@@ -150,16 +169,6 @@ namespace PinchRadialMenu
 				// Update is called once per frame
 				void Update ()
 				{
-
-						/*		if (Time.time > 8 && (!ad)) {
-								Debug.Log ("Closing Menu");
-								background.SetInteger ("MenuState", 2);
-								ad = true;
-						} else if (Time.time > 3 && (!ad1)) {
-								Debug.Log ("Opening Menu");
-								background.SetInteger ("MenuState", 1);
-								ad1 = true;
-						} */
 						RefreshMenu ();
 				}
 		#endregion

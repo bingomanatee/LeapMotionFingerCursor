@@ -9,10 +9,14 @@ namespace PinchRadialMenu
 				SpriteRenderer sr;
 				Color baseColor;
 				Color activeColor = new Color (0.75f, 0, 0.25f);
+				bool isCancel = false;
+				public string value = "";
 
 				// Use this for initialization
 				void Start ()
 				{
+						if (value == "")
+								value = name;
 						sr = GetComponent<SpriteRenderer> ();
 						baseColor = sr.color;
 				}
@@ -23,7 +27,7 @@ namespace PinchRadialMenu
 	
 				}
 
-				public void SetActive (bool active)
+				public void Select (bool active)
 				{
 						if (active)
 								sr.color = activeColor;
@@ -31,9 +35,9 @@ namespace PinchRadialMenu
 								sr.color = baseColor;
 				}
 
-				public void SetActive ()
+				public void Select ()
 				{
-						SetActive (true);
+						Select (true);
 				}
 		}
 
