@@ -54,8 +54,8 @@ TextureImporter:
         y: 1861
         width: 1084
         height: 845
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 5
+      pivot: {x: 1, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: '''Menu2Active_Open'
       rect:
@@ -64,8 +64,8 @@ TextureImporter:
         y: 719
         width: 846
         height: 1083
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 2
+      pivot: {x: .5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: '''Menu2Active_Save'
       rect:
@@ -74,8 +74,8 @@ TextureImporter:
         y: 1861
         width: 1059
         height: 856
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 4
+      pivot: {x: 0, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: '''Menu2Active_Background'
       rect:

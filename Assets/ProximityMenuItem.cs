@@ -11,14 +11,15 @@ namespace PinchRadialMenu
 				Color activeColor = new Color (0.75f, 0, 0.25f);
 				bool isCancel = false;
 				public string value = "";
+				public	GameObject baseSprite;
+				public	GameObject activeSprite;
 
 				// Use this for initialization
 				void Start ()
 				{
 						if (value == "")
 								value = name;
-						sr = GetComponent<SpriteRenderer> ();
-						baseColor = sr.color;
+						Select (false);
 				}
 	
 				// Update is called once per frame
@@ -29,10 +30,24 @@ namespace PinchRadialMenu
 
 				public void Select (bool active)
 				{
-						if (active)
-								sr.color = activeColor;
-						else
-								sr.color = baseColor;
+						if (active) {
+								baseSprite.GetComponent<SpriteRenderer> ().enabled = false;
+								activeSprite.GetComponent<SpriteRenderer> ().enabled = true;
+						} else {
+								baseSprite.GetComponent<SpriteRenderer> ().enabled = true;
+								activeSprite.GetComponent<SpriteRenderer> ().enabled = false;
+						}
+				}
+
+				public void Display (bool active)
+				{
+						baseSprite.GetComponent<SpriteRenderer> ().enabled = active;
+						activeSprite.GetComponent<SpriteRenderer> ().enabled = false; // always false til rollover
+				}
+
+				public void Display ()
+				{
+						Display (true);
 				}
 
 				public void Select ()

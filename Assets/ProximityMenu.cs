@@ -38,7 +38,7 @@ namespace PinchRadialMenu
 								if (value == state_ || value == null)
 										return;
 
-								Debug.Log ("Menu State: " + state_ + " to " + value);
+								Debug.Log (">>>>> Menu State: " + state_ + " to " + value);
 
 								if (state_ == MenuState.Open || state_ == MenuState.Over)
 										ReflectChosenMenu ();
@@ -79,10 +79,9 @@ namespace PinchRadialMenu
 
 				void ShowMenuItems (bool show)
 				{
-						//Debug.Log ("Setting visible of " + items.Count + " items to " + show);
+						Debug.Log ("ShowMenuItems: " + show);
 						foreach (ProximityMenuItem i in items) {
-								i.renderer.enabled = show;
-i.Select(false);
+								i.Display (show);
 						}
 				}
 
@@ -94,45 +93,58 @@ i.Select(false);
 				void RefreshMenu ()
 				{
 						if (cursor != null && cursor.state != null) {
-				
-								if (cursor.state != oldState) {
-										switch (cursor.state) {
-										case FingerCursor.PinchState.NoHands:
-												break;
-				
-										case FingerCursor.PinchState.Open:
-												if (state == MenuState.Open) {
+								if (state == MenuState.Open) {
+										if (cursor.state != oldState) {
+												switch (cursor.state) {
+												case FingerCursor.PinchState.NoHands:
+														break;
+					
+												case FingerCursor.PinchState.Open:
 														ShowMenuItems (false);
 														state = MenuState.Closed;
-												}
-												break;
-				
-										case FingerCursor.PinchState.Part:
-												if (state == MenuState.Open) {
+														break;
+					
+												case FingerCursor.PinchState.Part:
 														ShowMenuItems (false);
 														state = MenuState.Closed;
+														break;
+					
+												case FingerCursor.PinchState.Full:
+														ShowMenuItems (true);
+														break;
 												}
-												break;
-				
-										case FingerCursor.PinchState.Full:
-												ShowMenuItems (true);
-												state = MenuState.Open;
-												break;
+												oldState = cursor.state;
 										}
-
-										oldState = cursor.state;
+										FindHotMenuItem ();
+								} else if (state == MenuState.Over) {
+										if (cursor.state != oldState) {
+												switch (cursor.state) {
+												case FingerCursor.PinchState.NoHands:
+														break;
+							
+												case FingerCursor.PinchState.Open:
+														break;
+							
+												case FingerCursor.PinchState.Part:
+														break;
+							
+												case FingerCursor.PinchState.Full:
+														ShowMenuItems (true);
+														state = MenuState.Open;
+														break;
+												}
+												oldState = cursor.state;
+										}
 								}
-
-						}
-						if (state == MenuState.Open) {
-								FindHotMenuItem ();
 						}
 				}
 		
 				ProximityMenuItem lastHotMenu;
-
+		
 				void FindHotMenuItem ()
 				{
+						if (state != MenuState.Open)
+								return;
 						ProximityMenuItem hotMenu = null;
 						Vector3 cimp = cursor.immediateSprite.transform.position;
 						foreach (ProximityMenuItem mi in items) {
@@ -147,7 +159,7 @@ i.Select(false);
 								lastHotMenu = hotMenu;
 								lastHotMenu.Select ();
 						}
-						Debug.Log ("finding hot menu: " + lastHotMenu.value);
+						Debug.Log ("finding hot menu: " + lastHotMenu.name + "," + lastHotMenu.value);
 			
 				}
 		

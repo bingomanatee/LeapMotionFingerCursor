@@ -55,8 +55,8 @@ TextureImporter:
         y: 1861
         width: 1073
         height: 845
-      alignment: 9
-      pivot: {x: .389536202, y: .5}
+      alignment: 5
+      pivot: {x: 1, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Menu2-Open
       rect:
@@ -65,8 +65,8 @@ TextureImporter:
         y: 719
         width: 844
         height: 1083
-      alignment: 9
-      pivot: {x: .520062327, y: .390556127}
+      alignment: 2
+      pivot: {x: .5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Menu2-Save
       rect:
@@ -75,8 +75,8 @@ TextureImporter:
         y: 1861
         width: 1058
         height: 845
-      alignment: 9
-      pivot: {x: .590690851, y: .493320674}
+      alignment: 4
+      pivot: {x: 0, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Menu2-background
       rect:
