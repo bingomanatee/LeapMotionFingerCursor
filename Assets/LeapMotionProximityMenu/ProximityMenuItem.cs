@@ -13,13 +13,13 @@ namespace PinchRadialMenu
 				public string value = "";
 				public	GameObject baseSprite;
 				public	GameObject activeSprite;
+		public GameObject center; // used to determine proximity
 
 				// Use this for initialization
 				void Start ()
 				{
 						if (value == "")
 								value = name;
-						Select (false);
 				}
 	
 				// Update is called once per frame
