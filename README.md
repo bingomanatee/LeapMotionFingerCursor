@@ -10,3 +10,7 @@ This project illustrates several things useful for LeapMotion interaction:
 * the ability to "freeze" the cursor during pinching. 
 
 This project is a library for building menus etc. using the leap motion tracker. 
+
+## PinchMenu
+
+This library includes a pinch menu that is the equivalent of the classic "Leap Motion Radial Menu" with pinch driving
